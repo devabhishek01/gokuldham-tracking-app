@@ -34,7 +34,6 @@ jobs:
   deploy:
     name: Deploy to VPS Server
     needs: build-and-test
-    if: ${{ secrets.VPS_HOST != '' }}
     runs-on: ubuntu-latest
     steps:
       - name: SSH & Deploy to VPS
