@@ -1,18 +1,43 @@
-name: Deploy ResqTrack CRM to VPS
+name: CI & Deployment Pipeline
 
 on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  deploy:
+  build-and-test:
+    name: Build & Verification Check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Deploy to VPS via SSH
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Next.js Application
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+          NODE_ENV: production
+
+  deploy:
+    name: Deploy to VPS Server
+    needs: build-and-test
+    if: ${{ secrets.VPS_HOST != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH & Deploy to VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
