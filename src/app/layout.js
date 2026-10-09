@@ -30,6 +30,8 @@ export const viewport = {
   userScalable: false,
 };
 
+import PwaInstallPrompt from "@/components/PwaInstallPrompt";
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${manrope.variable} h-full antialiased`}>
@@ -42,6 +44,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className="min-h-full flex flex-col bg-[#f5f6f8] text-gray-900 font-sans">
         {children}
+        <PwaInstallPrompt />
         <script
           dangerouslySetInnerHTML={{
             __html: `

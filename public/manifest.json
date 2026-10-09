@@ -1,10 +1,12 @@
 {
-  "name": "Gokuldham Ambulance Tracking Driver Console",
+  "id": "/",
+  "name": "Gokuldham Ambulance Tracking",
   "short_name": "Gokuldham",
-  "description": "Ambulance Rescue Driver & Task Management Portal",
-  "start_url": "/driver",
+  "description": "Gokul Dham Animal Hospital & Ambulance Tracking Portal",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "any",
   "background_color": "#ffffff",
   "theme_color": "#ea580c",
   "icons": [
