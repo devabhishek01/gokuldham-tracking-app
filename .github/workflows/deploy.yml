@@ -1,0 +1,28 @@
+name: Deploy ResqTrack CRM to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            cd /www/wwwroot/manushatrupafoundation.net
+            git pull origin main
+            npm install
+            node scripts/init-db.js
+            npm run build
+            pm2 restart ecosystem.config.js || pm2 start ecosystem.config.js
+            pm2 save
