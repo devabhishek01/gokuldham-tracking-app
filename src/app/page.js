@@ -6,9 +6,9 @@ import { Shield, Lock, Mail, ArrowRight, User, Truck, HeartHandshake, AlertCircl
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("caller@gokuldham.org");
-  const [password, setPassword] = useState("caller123");
-  const [vehicleInput, setVehicleInput] = useState("HR-55-1001");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [vehicleInput, setVehicleInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState("TELECALLER");
   const [error, setError] = useState("");
@@ -61,19 +61,12 @@ export default function LoginPage() {
     }
   };
 
-  const fillDemoCredentials = (role) => {
+  const handleRoleSelect = (role) => {
     setSelectedRole(role);
     setError("");
-    if (role === "ADMIN") {
-      setEmail("admin@gokuldham.org");
-      setPassword("admin123");
-    } else if (role === "TELECALLER") {
-      setEmail("caller@gokuldham.org");
-      setPassword("caller123");
-    } else if (role === "DRIVER") {
-      setVehicleInput("HR-55-1001");
-      setPassword("driver123");
-    }
+    setEmail("");
+    setPassword("");
+    setVehicleInput("");
   };
 
   return (
@@ -175,7 +168,7 @@ export default function LoginPage() {
           <div className="grid grid-cols-3 gap-1.5 mb-6 bg-slate-100 p-1.5 rounded-2xl border border-slate-200/80">
             <button
               type="button"
-              onClick={() => fillDemoCredentials("TELECALLER")}
+              onClick={() => handleRoleSelect("TELECALLER")}
               className={`py-2.5 px-2 rounded-xl text-[12px] font-bold tracking-wide flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer ${selectedRole === "TELECALLER"
                   ? "bg-white text-emerald-700 shadow-sm border border-slate-200/80"
                   : "text-slate-500 hover:text-slate-900"
@@ -187,7 +180,7 @@ export default function LoginPage() {
 
             <button
               type="button"
-              onClick={() => fillDemoCredentials("DRIVER")}
+              onClick={() => handleRoleSelect("DRIVER")}
               className={`py-2.5 px-2 rounded-xl text-[12px] font-bold tracking-wide flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer ${selectedRole === "DRIVER"
                   ? "bg-white text-orange-700 shadow-sm border border-slate-200/80"
                   : "text-slate-500 hover:text-slate-900"
@@ -199,7 +192,7 @@ export default function LoginPage() {
 
             <button
               type="button"
-              onClick={() => fillDemoCredentials("ADMIN")}
+              onClick={() => handleRoleSelect("ADMIN")}
               className={`py-2.5 px-2 rounded-xl text-[12px] font-bold tracking-wide flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer ${selectedRole === "ADMIN"
                   ? "bg-white text-blue-700 shadow-sm border border-slate-200/80"
                   : "text-slate-500 hover:text-slate-900"
