@@ -1,0 +1,40 @@
+export default function manifest() {
+  return {
+    name: "Gokuldham Ambulance Tracking",
+    short_name: "Gokuldham",
+    description: "Gokul Dham Animal Hospital & Ambulance Tracking Portal",
+    start_url: "/",
+    scope: "/",
+    display: "standalone",
+    orientation: "any",
+    background_color: "#ffffff",
+    theme_color: "#ea580c",
+    prefer_related_applications: false,
+    icons: [
+      {
+        src: "/icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "/icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "maskable",
+      },
+      {
+        src: "/icon-512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "/icon-512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
+      },
+    ],
+  };
+}
