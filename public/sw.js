@@ -1,4 +1,4 @@
-const CACHE_NAME = "gokuldham-v3";
+const CACHE_NAME = "gokuldham-v4";
 const ASSETS_TO_CACHE = [
   "/driver",
   "/manifest.json",
