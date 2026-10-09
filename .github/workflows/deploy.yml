@@ -36,14 +36,14 @@ jobs:
     needs: build-and-test
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to VPS via Native SSH
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
+      - name: Execute Deployment Commands on VPS
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
-          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
         run: |
-          mkdir -p ~/.ssh
-          echo "$VPS_SSH_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa "$VPS_USERNAME@$VPS_HOST" "export PATH=\$PATH:/usr/local/bin:/usr/bin:/bin:/www/server/nodejs/v20.18.0/bin:~/.nvm/versions/node/\$(ls ~/.nvm/versions/node 2>/dev/null | tail -n 1)/bin; cd /www/wwwroot/manushatrupafoundation.net && git pull origin main && npm install && node scripts/init-db.js && npm run build && (pm2 restart ecosystem.config.cjs || pm2 start ecosystem.config.cjs) && pm2 save"
+          ssh -o StrictHostKeyChecking=no "$VPS_USERNAME@$VPS_HOST" "export PATH=\$PATH:/usr/local/bin:/usr/bin:/bin:/www/server/nodejs/v20.18.0/bin:~/.nvm/versions/node/\$(ls ~/.nvm/versions/node 2>/dev/null | tail -n 1)/bin; cd /www/wwwroot/manushatrupafoundation.net && git pull origin main && npm install && node scripts/init-db.js && npm run build && (pm2 restart ecosystem.config.cjs || pm2 start ecosystem.config.cjs) && pm2 save"
