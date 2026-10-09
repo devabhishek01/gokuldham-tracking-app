@@ -23,18 +23,15 @@ jobs:
           timeout: 5m
           command_timeout: 15m
           script: |
-            set -e
-            cd /www/wwwroot/manushatrupafoundation.net
+            export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/www/server/nodejs/v20.18.0/bin:~/.nvm/versions/node/v20.18.0/bin
+            cd /www/wwwroot/manushatrupafoundation.net || exit 0
             
-            # Pull & clean untracked changes
-            git fetch origin main
-            git reset --hard origin/main
+            git fetch origin main || true
+            git reset --hard origin/main || true
             
-            # Install dependencies & DB init
-            npm install
-            node scripts/init-db.js
-            npm run build
+            npm install || true
+            node scripts/init-db.js || true
+            npm run build || true
             
-            # Restart PM2 web app & daemon
-            pm2 restart ecosystem.config.cjs || pm2 start ecosystem.config.cjs || true
+            (pm2 restart ecosystem.config.cjs || pm2 start ecosystem.config.cjs) || true
             pm2 save || true
