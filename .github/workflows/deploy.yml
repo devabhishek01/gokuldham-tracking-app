@@ -1,49 +1,40 @@
-name: CI & Deployment Pipeline
+name: Deploy to VPS
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  build-and-test:
-    name: Build & Verification Check
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 20
-        uses: actions/setup-node@v4
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          node-version: 20
-          cache: 'npm'
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Build Next.js Application
-        run: npm run build
-        env:
-          NEXT_TELEMETRY_DISABLED: 1
-          NODE_ENV: production
-
-  deploy:
-    name: Deploy to VPS Server
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Setup SSH Agent
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
-
-      - name: Execute Deployment Commands on VPS
-        env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
-        run: |
-          ssh -o StrictHostKeyChecking=no "$VPS_USERNAME@$VPS_HOST" "export PATH=\$PATH:/usr/local/bin:/usr/bin:/bin:/www/server/nodejs/v20.18.0/bin:~/.nvm/versions/node/\$(ls ~/.nvm/versions/node 2>/dev/null | tail -n 1)/bin; cd /www/wwwroot/manushatrupafoundation.net && git pull origin main && npm install && node scripts/init-db.js && npm run build && (pm2 restart ecosystem.config.cjs || pm2 start ecosystem.config.cjs) && pm2 save"
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          timeout: 5m
+          command_timeout: 15m
+          script: |
+            set -e
+            cd /www/wwwroot/manushatrupafoundation.net
+            
+            # Pull & clean untracked changes
+            git fetch origin main
+            git reset --hard origin/main
+            
+            # Install dependencies & DB init
+            npm install
+            node scripts/init-db.js
+            npm run build
+            
+            # Restart PM2 web app & daemon
+            pm2 restart ecosystem.config.cjs || pm2 start ecosystem.config.cjs || true
+            pm2 save || true
