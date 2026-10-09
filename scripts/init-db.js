@@ -130,8 +130,24 @@ async function createTables(pool) {
       photo TEXT,
       time VARCHAR(50),
       completed_at VARCHAR(255),
+      assigned_at TIMESTAMPTZ DEFAULT NOW(),
+      trip_started_at TIMESTAMPTZ,
+      reached_at TIMESTAMPTZ,
+      pickup_confirmed_at TIMESTAMPTZ,
+      hospital_reached_at TIMESTAMPTZ,
+      unload_started_at TIMESTAMPTZ,
+      unload_completed_at TIMESTAMPTZ,
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
+  `);
+  await pool.query(`
+    ALTER TABLE cases ADD COLUMN IF NOT EXISTS assigned_at TIMESTAMPTZ DEFAULT NOW();
+    ALTER TABLE cases ADD COLUMN IF NOT EXISTS trip_started_at TIMESTAMPTZ;
+    ALTER TABLE cases ADD COLUMN IF NOT EXISTS reached_at TIMESTAMPTZ;
+    ALTER TABLE cases ADD COLUMN IF NOT EXISTS pickup_confirmed_at TIMESTAMPTZ;
+    ALTER TABLE cases ADD COLUMN IF NOT EXISTS hospital_reached_at TIMESTAMPTZ;
+    ALTER TABLE cases ADD COLUMN IF NOT EXISTS unload_started_at TIMESTAMPTZ;
+    ALTER TABLE cases ADD COLUMN IF NOT EXISTS unload_completed_at TIMESTAMPTZ;
   `);
   console.log("  ✅ Table: cases");
 
