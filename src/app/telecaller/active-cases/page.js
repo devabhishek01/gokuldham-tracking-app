@@ -31,66 +31,83 @@ export default function ActiveCasesPage() {
   const [reassignLoading, setReassignLoading] = useState(false);
   const [reassignSuccess, setReassignSuccess] = useState("");
 
-  const fetchData = async () => {
-    try {
-      const [gpsRes, casesRes, driversRes] = await Promise.all([
-        fetch("/api/gps?t=" + Date.now()),
-        fetch("/api/cases?t=" + Date.now()),
-        fetch("/api/drivers"),
-      ]);
-      const gpsJson   = await gpsRes.json();
-      const casesJson = await casesRes.json();
-      const driversJson = await driversRes.json();
+  // Fetch drivers once on mount
+  useEffect(() => {
+    fetch("/api/drivers")
+      .then(res => res.json())
+      .then(json => {
+        if (json.success && json.data) setDrivers(json.data);
+      })
+      .catch(err => console.error("Drivers Fetch Error:", err));
+  }, []);
 
-      if (gpsJson.success && gpsJson.data?.object) {
-        setGpsData(gpsJson.data.object);
-      }
-      if (casesJson.success && casesJson.data) {
-        setCases(casesJson.data);
-      }
-      if (driversJson.success && driversJson.data) {
-        setDrivers(driversJson.data);
+  // Fast cases fetching (every 3 seconds)
+  const fetchCases = async () => {
+    try {
+      const res = await fetch("/api/cases?t=" + Date.now());
+      const json = await res.json();
+      if (json.success && json.data) {
+        setCases(json.data);
       }
     } catch (err) {
-      console.error("Data Fetch Error on Telecaller Active Cases:", err);
+      console.error("Cases Fetch Error:", err);
     } finally {
       setLoading(false);
     }
   };
 
+  // Asynchronous GPS telemetry fetching (every 6 seconds, non-blocking)
+  const fetchGps = async () => {
+    try {
+      const res = await fetch("/api/gps?t=" + Date.now());
+      const json = await res.json();
+      if (json.success && json.data?.object) {
+        setGpsData(json.data.object);
+      }
+    } catch (err) {}
+  };
+
   useEffect(() => {
-    fetchData();
-    const interval = setInterval(fetchData, 4000);
-    return () => clearInterval(interval);
+    fetchCases();
+    fetchGps();
+    const caseInterval = setInterval(fetchCases, 3000);
+    const gpsInterval = setInterval(fetchGps, 6000);
+    return () => {
+      clearInterval(caseInterval);
+      clearInterval(gpsInterval);
+    };
   }, []);
 
   const handleExecuteReassign = async (e) => {
     e.preventDefault();
     if (!reassignModal.newDriver || reassignModal.newDriver === reassignModal.currentDriver) return;
 
+    const targetId = reassignModal.caseId;
+    const newDriverName = reassignModal.newDriver;
+
+    // 1. Instant optimistic UI update
+    setCases(prev => prev.map(c => c.id === targetId ? { ...c, driver: newDriverName } : c));
+    setReassignSuccess(`Case successfully reassigned to ${newDriverName}!`);
     setReassignLoading(true);
+
+    setTimeout(() => {
+      setReassignSuccess("");
+      setReassignModal({ open: false, caseId: null, currentDriver: "", newDriver: "", reason: "Re-allocation" });
+      setReassignLoading(false);
+    }, 500);
+
+    // 2. Background API persistence
     try {
-      const res = await fetch("/api/cases", {
+      await fetch("/api/cases", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          id: reassignModal.caseId,
-          driver: reassignModal.newDriver,
+          id: targetId,
+          driver: newDriverName,
         })
       });
-      const json = await res.json();
-      if (json.success && json.data) {
-        setCases(prev => prev.map(c => c.id === reassignModal.caseId ? json.data : c));
-        setReassignSuccess(`Case successfully reassigned to ${reassignModal.newDriver}!`);
-        setTimeout(() => {
-          setReassignSuccess("");
-          setReassignModal({ open: false, caseId: null, currentDriver: "", newDriver: "", reason: "Re-allocation" });
-        }, 1500);
-      }
     } catch (err) {
       console.error("Failed to reassign case:", err);
-    } finally {
-      setReassignLoading(false);
     }
   };
 
@@ -298,20 +315,13 @@ export default function ActiveCasesPage() {
                         </div>
                       </td>
 
-                      {/* Live Dropdown stage adjustment */}
+                      {/* Driver Synced Live Stage Status */}
                       <td className="py-4 px-3">
-                        <div className="flex flex-col gap-1.5">
-                          <select
-                            value={c.status}
-                            onChange={(e) => handleUpdateStatus(c.id, e.target.value)}
-                            className={`h-8 px-2.5 rounded-lg text-[10.5px] font-black uppercase outline-none cursor-pointer ${getStatusColor(c.status)}`}
-                          >
-                            <option value="Assigned">Assigned</option>
-                            <option value="En Route">En Route</option>
-                            <option value="Reached Location">Reached Spot</option>
-                            <option value="Animal Picked">Animal Picked</option>
-                            <option value="Hospital Reached">Hospital Reached</option>
-                          </select>
+                        <div className="flex items-center">
+                          <span className={`px-2.5 py-1 rounded-xl text-[10.5px] font-black uppercase tracking-wider ${getStatusColor(c.status)} flex items-center gap-1.5`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${c.status === 'Completed' ? 'bg-emerald-500' : 'bg-orange-500 animate-pulse'}`} />
+                            {c.status}
+                          </span>
                         </div>
                       </td>
 
