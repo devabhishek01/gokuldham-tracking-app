@@ -1,4 +1,4 @@
-const CACHE_NAME = "resqtrack-v1";
+const CACHE_NAME = "gokuldham-v1";
 const ASSETS_TO_CACHE = [
   "/driver",
   "/manifest.json",

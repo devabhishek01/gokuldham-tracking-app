@@ -273,7 +273,7 @@ export default function DriverLayout({ children }) {
             {children}
           </div>
           <footer className="hidden sm:flex h-[56px] bg-white border-t border-orange-100 px-6 sm:px-8 items-center justify-between flex-shrink-0 w-full mt-auto text-[11px] font-bold text-gray-400">
-            <span>© {new Date().getFullYear()} RESQTRACK SYSTEMS.</span>
+            <span>© {new Date().getFullYear()} GOKULDHAM AMBULANCE TRACKING.</span>
             <span className="flex items-center gap-1.5 text-orange-600">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
               Driver Connected

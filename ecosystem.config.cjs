@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "resqtrack-web",
+      name: "gokuldham-web",
       script: "npm",
       args: "run start",
       cwd: "./",
@@ -19,7 +19,7 @@ module.exports = {
       combine_logs: true,
     },
     {
-      name: "resqtrack-gps-daemon",
+      name: "gokuldham-gps-daemon",
       script: "scripts/gps-daemon.js",
       cwd: "./",
       instances: 1,

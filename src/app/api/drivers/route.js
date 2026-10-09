@@ -38,7 +38,7 @@ export async function POST(req) {
       [
         driverId,
         name,
-        email || `${name.toLowerCase().replace(/\s+/g, "")}@resqtrack.org`,
+        email || `${name.toLowerCase().replace(/\s+/g, "")}@gokuldham.org`,
         phone,
         license || `DL-${ambulance_number}A-${1000 + Number(ambulance_number)}`,
         Number(ambulance_number),

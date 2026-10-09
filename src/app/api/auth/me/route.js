@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "resqtrack_secret_fallback";
+const JWT_SECRET = process.env.JWT_SECRET || "gokuldham_secret_fallback";
 
 export async function GET() {
   try {

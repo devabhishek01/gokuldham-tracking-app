@@ -458,7 +458,7 @@ export default function DriversPage() {
                 <div className="flex flex-col gap-1 col-span-2">
                   <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Email</label>
                   <input type="email" value={addForm.email} onChange={e => setAddForm(f => ({ ...f, email: e.target.value }))}
-                    placeholder="driver@resqtrack.org" className="h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-[12.5px] focus:outline-none focus:border-blue-500" />
+                    placeholder="driver@gokuldham.org" className="h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-[12.5px] focus:outline-none focus:border-blue-500" />
                 </div>
               </div>
               <button type="submit" disabled={addLoading}

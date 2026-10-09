@@ -72,7 +72,7 @@ const DRIVERS_LIST = [
   { name: "Abhishek Pal",       phone: "9876543225" },
 ];
 
-// Ensure resqtrack database exists
+// Ensure gokuldham_app database exists
 async function ensureDatabase() {
   const dbUrl = process.env.DATABASE_URL;
   if (dbUrl) {
@@ -85,12 +85,12 @@ async function ensureDatabase() {
     database: "postgres", ssl: false,
   });
   try {
-    const res = await adminPool.query("SELECT 1 FROM pg_database WHERE datname = 'resqtrack'");
+    const res = await adminPool.query("SELECT 1 FROM pg_database WHERE datname = 'gokuldham_app'");
     if (res.rows.length === 0) {
-      await adminPool.query("CREATE DATABASE resqtrack");
-      console.log("✅ Database 'resqtrack' created");
+      await adminPool.query("CREATE DATABASE gokuldham_app");
+      console.log("✅ Database 'gokuldham_app' created");
     } else {
-      console.log("ℹ️  Database 'resqtrack' already exists");
+      console.log("ℹ️  Database 'gokuldham_app' already exists");
     }
   } finally {
     await adminPool.end();
@@ -196,8 +196,8 @@ async function createTables(pool) {
 async function seedUsers(pool) {
   console.log("\n👥 Seeding users (auth)...");
   const users = [
-    { name: "Admin User",   email: "admin@resqtrack.org",   password: "admin123",   role: "ADMIN",      vehicle_name: null },
-    { name: "Priya Sharma", email: "caller@resqtrack.org",  password: "caller123",  role: "TELECALLER", vehicle_name: null },
+    { name: "Admin User",   email: "admin@gokuldham.org",   password: "admin123",   role: "ADMIN",      vehicle_name: null },
+    { name: "Priya Sharma", email: "caller@gokuldham.org",  password: "caller123",  role: "TELECALLER", vehicle_name: null },
     ...DRIVERS_LIST.map((drv, idx) => ({
       name: drv.name, email: null, password: "driver123", role: "DRIVER",
       vehicle_name: `Ambulance ${String(idx + 1).padStart(2, "0")}`,
@@ -239,7 +239,7 @@ async function seedDrivers(pool) {
       [
         driverId,
         drv.name,
-        `${drv.name.toLowerCase().replace(/\s+/g, "")}@resqtrack.org`,
+        `${drv.name.toLowerCase().replace(/\s+/g, "")}@gokuldham.org`,
         drv.phone,
         `DL-${num}A-${1000 + num}`,
         num,
@@ -310,11 +310,11 @@ async function migrateCases(pool) {
 
 // Main
 async function main() {
-  console.log("🚀 ResqTrack DB Initialization Starting...\n");
+  console.log("🚀 Gokuldham Ambulance Tracking DB Initialization Starting...\n");
 
   await ensureDatabase();
 
-  const dbUrl = process.env.DATABASE_URL || "postgresql://postgres:Admin123@localhost:5432/resqtrack";
+  const dbUrl = process.env.DATABASE_URL || "postgresql://postgres:Admin123@localhost:5432/gokuldham_app";
   const pool = new Pool({
     connectionString: dbUrl,
     ssl: dbUrl.includes("neon.tech") || dbUrl.includes("amazonaws") ? { rejectUnauthorized: false } : false,

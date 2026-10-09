@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
-const JWT_SECRET = process.env.JWT_SECRET || "resqtrack_secret_fallback";
+const JWT_SECRET = process.env.JWT_SECRET || "gokuldham_secret_fallback";
 const COOKIE_NAME = "auth_token";
 
 export async function POST(req) {

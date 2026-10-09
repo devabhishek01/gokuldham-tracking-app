@@ -7,9 +7,9 @@ export default function SettingsPage() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   
   // Organization settings
-  const [orgName, setOrgName] = useState("ResqTrack Animal Welfare Association");
+  const [orgName, setOrgName] = useState("Gokul Dham Gau Sewa Mahatirth");
   const [supportPhone, setSupportPhone] = useState("9876543200");
-  const [supportEmail, setSupportEmail] = useState("ops@resqtrack.org");
+  const [supportEmail, setSupportEmail] = useState("ops@gokuldham.org");
 
   // System parameters
   const [pollingRate, setPollingRate] = useState(4);

@@ -51,7 +51,7 @@ loadEnv();
 
 const DATABASE_URL =
   process.env.DATABASE_URL ||
-  "postgresql://postgres:Admin123@localhost:5432/resqtrack";
+  "postgresql://postgres:Admin123@localhost:5432/gokuldham_app";
 const MILLITRACK_EMAIL = process.env.MILLITRACK_EMAIL || "gokulk01";
 const MILLITRACK_PASSWORD = process.env.MILLITRACK_PASSWORD || "123456";
 const POLL_INTERVAL_MS = parseInt(process.env.GPS_POLL_INTERVAL_MS || "10000", 10);

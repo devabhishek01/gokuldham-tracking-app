@@ -40,7 +40,7 @@ export default function AdminLayout({ children }) {
 
           {/* Standard Minimal Footer */}
           <footer className="h-[56px] bg-white border-t border-gray-200/50 px-6 sm:px-8 flex items-center justify-between flex-shrink-0 w-full mt-auto text-[11px] font-bold text-gray-400">
-            <span>© {new Date().getFullYear()} RESQTRACK SYSTEMS.</span>
+            <span>© {new Date().getFullYear()} GOKULDHAM AMBULANCE TRACKING.</span>
             <span className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
               All Operations Active

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "resqtrack_gokuldham_super_secret_jwt_key_2026"
+  process.env.JWT_SECRET || "gokuldham_secret_jwt_key_2026"
 );
 
 // Routes that require authentication and their allowed roles

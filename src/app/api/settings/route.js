@@ -6,9 +6,9 @@ import path from "path";
 const SETTINGS_FILE = path.join(process.cwd(), "src/lib/settings.json");
 
 const defaultSettings = {
-  orgName: "ResqTrack Animal Welfare Association",
+  orgName: "Gokul Dham Gau Sewa Mahatirth",
   supportPhone: "9876543200",
-  supportEmail: "ops@resqtrack.org",
+  supportEmail: "ops@gokuldham.org",
   pollingRate: 4,
   offlineTimeout: 15,
   autoDispatch: "NEAREST",

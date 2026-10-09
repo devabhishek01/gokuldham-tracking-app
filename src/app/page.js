@@ -6,7 +6,7 @@ import { Shield, Lock, Mail, ArrowRight, User, Truck, HeartHandshake, AlertCircl
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("caller@resqtrack.org");
+  const [email, setEmail] = useState("caller@gokuldham.org");
   const [password, setPassword] = useState("caller123");
   const [vehicleInput, setVehicleInput] = useState("HR-55-1001");
   const [loading, setLoading] = useState(false);
@@ -65,10 +65,10 @@ export default function LoginPage() {
     setSelectedRole(role);
     setError("");
     if (role === "ADMIN") {
-      setEmail("admin@resqtrack.org");
+      setEmail("admin@gokuldham.org");
       setPassword("admin123");
     } else if (role === "TELECALLER") {
-      setEmail("caller@resqtrack.org");
+      setEmail("caller@gokuldham.org");
       setPassword("caller123");
     } else if (role === "DRIVER") {
       setVehicleInput("HR-55-1001");
@@ -150,7 +150,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <div className="relative z-10 text-[11px] font-bold text-slate-400">
-          © {new Date().getFullYear()} GOKUL DHAM ANIMAL HOSPITAL. RESQTRACK PLATFORM.
+          © {new Date().getFullYear()} GOKUL DHAM ANIMAL HOSPITAL. GOKULDHAM AMBULANCE TRACKING.
         </div>
       </div>
 

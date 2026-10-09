@@ -1,6 +1,6 @@
 {
-  "name": "ResqTrack Driver Console",
-  "short_name": "ResqTrack",
+  "name": "Gokuldham Ambulance Tracking Driver Console",
+  "short_name": "Gokuldham",
   "description": "Ambulance Rescue Driver & Task Management Portal",
   "start_url": "/driver",
   "display": "standalone",
